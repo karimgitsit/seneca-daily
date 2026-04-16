@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm --version)",
+      "Bash(npx create-vite@5 . --template react-ts)",
+      "Read(//private/tmp/**)",
+      "Bash(npx create-vite@5 seneca-temp --template react-ts)",
+      "Bash(npm install:*)",
+      "Bash(mkdir -p src/hooks src/lib src/components src/screens scraper public/data public/fonts public/icons)",
+      "Bash(rm -f src/App.css src/assets/react.svg public/vite.svg)",
+      "Bash(pip3 install:*)",
+      "Bash(curl -sL \"https://fonts.google.com/download?family=EB+Garamond\" -o /tmp/eb-garamond.zip)",
+      "Bash(unzip -l /tmp/eb-garamond.zip)",
+      "Bash(unzip -o eb-garamond.zip -d eb-garamond-extracted)",
+      "Bash(cp /tmp/eb-garamond-extracted/eb-garamond-v32-latin-regular.woff2 \"/Users/karim/Desktop/Seneca App/public/fonts/eb-garamond-latin-400.woff2\")",
+      "Bash(cp /tmp/eb-garamond-extracted/eb-garamond-v32-latin-italic.woff2 \"/Users/karim/Desktop/Seneca App/public/fonts/eb-garamond-latin-400-italic.woff2\")",
+      "Bash(python3 scraper/scrape.py)",
+      "Bash(node -e ':*)",
+      "Bash(python3 -c ':*)",
+      "Bash(python3)",
+      "Bash(kill %1)",
+      "Bash(python3 scraper/validate.py)",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
+    ]
+  }
+}
