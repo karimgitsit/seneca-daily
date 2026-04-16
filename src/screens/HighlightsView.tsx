@@ -5,7 +5,7 @@ import { highlightsToMarkdown, downloadMarkdown } from '../lib/markdown'
 import type { Highlight } from '../types'
 
 export default function HighlightsView() {
-  const { highlights, removeHighlight, clearAll } = useHighlights()
+  const { highlights, removeHighlight } = useHighlights()
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [copiedAll, setCopiedAll] = useState(false)
 
