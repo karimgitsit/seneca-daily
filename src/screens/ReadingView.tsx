@@ -3,7 +3,7 @@ import { useLetters } from '../hooks/useLetters'
 import { useCurrentLetter } from '../hooks/useCurrentLetter'
 import { useHighlights } from '../hooks/useHighlights'
 import { useScrollPosition } from '../hooks/useScrollPosition'
-import { getReadLetters, setReadLetters } from '../lib/storage'
+import { useReadLetters } from '../hooks/useReadLetters'
 import LetterHeader from '../components/LetterHeader'
 import LetterBody from '../components/LetterBody'
 import NavigationArrows from '../components/NavigationArrows'
@@ -13,6 +13,7 @@ export default function ReadingView() {
   const { letters, loading } = useLetters()
   const { currentLetter, setCurrentLetter } = useCurrentLetter()
   const { highlights, addHighlight, removeHighlight } = useHighlights(currentLetter)
+  const { readLetters, toggle: toggleReadLetter } = useReadLetters()
   const scrollRef = useRef<HTMLElement | null>(null)
 
   // Get the main scroll container from the Layout
@@ -25,7 +26,6 @@ export default function ReadingView() {
   const { saveCurrentScroll } = useScrollPosition(currentLetter, scrollRef)
 
   const letter = letters.find(l => l.number === currentLetter)
-  const readLetters = getReadLetters()
   const isRead = readLetters.has(currentLetter)
 
   const navigate = useCallback((n: number) => {
@@ -37,17 +37,8 @@ export default function ReadingView() {
   }, [setCurrentLetter, saveCurrentScroll])
 
   const toggleRead = useCallback(() => {
-    const read = getReadLetters()
-    if (read.has(currentLetter)) {
-      read.delete(currentLetter)
-    } else {
-      read.add(currentLetter)
-    }
-    setReadLetters(read)
-    // Force re-render by touching state — since readLetters is external,
-    // we use a small trick: set the same letter to trigger re-render
-    setCurrentLetter(currentLetter)
-  }, [currentLetter, setCurrentLetter])
+    toggleReadLetter(currentLetter)
+  }, [currentLetter, toggleReadLetter])
 
   const handleToggleHighlight = useCallback(async (
     sentenceText: string,
