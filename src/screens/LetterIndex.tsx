@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useLetters } from '../hooks/useLetters'
 import { useCurrentLetter } from '../hooks/useCurrentLetter'
-import { getReadLetters } from '../lib/storage'
+import { useReadLetters } from '../hooks/useReadLetters'
 import { toRoman } from '../lib/roman'
 
 export default function LetterIndex() {
   const { letters, loading } = useLetters()
   const { setCurrentLetter } = useCurrentLetter()
+  const { readLetters } = useReadLetters()
   const navigate = useNavigate()
-  const readLetters = getReadLetters()
 
   const handleSelect = (letterNumber: number) => {
     setCurrentLetter(letterNumber)
@@ -44,7 +44,7 @@ export default function LetterIndex() {
                   <span className="text-xs text-[var(--color-muted)] tracking-wider">
                     {toRoman(letter.number)}
                   </span>
-                  <p className="truncate">{letter.title}</p>
+                  <p className="truncate" style={{ fontFamily: "'EB Garamond', Georgia, 'Times New Roman', serif" }}>{letter.title}</p>
                 </div>
               </button>
             </li>
