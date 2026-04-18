@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react'
+
 interface Props {
   text: string
   isHighlighted: boolean
@@ -5,21 +7,18 @@ interface Props {
 }
 
 export default function Sentence({ text, isHighlighted, onTap }: Props) {
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    onTap()
+  }
+
   return (
-    <button
-      type="button"
-      onClick={onTap}
+    <a
+      href="#"
+      onClick={handleClick}
       style={{
-        font: 'inherit',
         color: 'inherit',
-        padding: 0,
-        margin: 0,
-        border: 'none',
-        background: 'none',
-        display: 'inline',
-        textAlign: 'inherit',
-        lineHeight: 'inherit',
-        letterSpacing: 'inherit',
+        textDecoration: 'none',
         cursor: 'pointer',
         touchAction: 'manipulation',
         WebkitUserSelect: 'none',
@@ -32,6 +31,6 @@ export default function Sentence({ text, isHighlighted, onTap }: Props) {
       }`}
     >
       {text}
-    </button>
+    </a>
   )
 }
