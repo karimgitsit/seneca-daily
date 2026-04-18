@@ -40,8 +40,8 @@ export default function LetterIndex() {
                     isRead ? 'bg-[var(--color-muted)]' : ''
                   }`}
                 />
-                <div className="min-w-0">
-                  <span className="text-xs text-[var(--color-muted)] tracking-wider">
+                <div className="min-w-0 flex items-baseline gap-3">
+                  <span className="flex-none text-xs text-[var(--color-muted)] tracking-wider">
                     {toRoman(letter.number)}
                   </span>
                   <p className="truncate" style={{ fontFamily: "'EB Garamond', Georgia, 'Times New Roman', serif" }}>{letter.title}</p>
