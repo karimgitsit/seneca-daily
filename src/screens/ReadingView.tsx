@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useLetters } from '../hooks/useLetters'
 import { useCurrentLetter } from '../hooks/useCurrentLetter'
 import { useHighlights } from '../hooks/useHighlights'
@@ -17,6 +17,7 @@ export default function ReadingView() {
   const { highlights, addHighlight, removeHighlight } = useHighlights(currentLetter)
   const { readLetters, toggle: toggleReadLetter } = useReadLetters()
   const { highlightMode, toggleHighlightMode } = useHighlightMode()
+  const [tapCount, setTapCount] = useState(0)
   const scrollRef = useRef<HTMLElement | null>(null)
 
   // Get the main scroll container from the Layout
@@ -49,6 +50,7 @@ export default function ReadingView() {
     startOffset: number,
     endOffset: number,
   ) => {
+    setTapCount(c => c + 1)
     // Check if this sentence is already highlighted
     const existing = highlights.find(h =>
       h.paragraphIndex === paragraphIndex &&
@@ -107,7 +109,7 @@ export default function ReadingView() {
         isRead={isRead}
         onToggleRead={toggleRead}
       />
-      <HighlightModeToggle enabled={highlightMode} onToggle={toggleHighlightMode} />
+      <HighlightModeToggle enabled={highlightMode} onToggle={toggleHighlightMode} tapCount={tapCount} />
     </div>
   )
 }

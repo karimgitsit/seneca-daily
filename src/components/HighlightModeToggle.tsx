@@ -1,9 +1,10 @@
 interface Props {
   enabled: boolean
   onToggle: () => void
+  tapCount: number
 }
 
-export default function HighlightModeToggle({ enabled, onToggle }: Props) {
+export default function HighlightModeToggle({ enabled, onToggle, tapCount }: Props) {
   return (
     <button
       type="button"
@@ -25,7 +26,9 @@ export default function HighlightModeToggle({ enabled, onToggle }: Props) {
         <path d="M12 20h9" />
         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
       </svg>
-      <span className="text-sm">{enabled ? 'Done' : 'Highlight'}</span>
+      <span className="text-sm">
+        {enabled ? `Done${tapCount > 0 ? ` (${tapCount})` : ''}` : 'Highlight'}
+      </span>
     </button>
   )
 }

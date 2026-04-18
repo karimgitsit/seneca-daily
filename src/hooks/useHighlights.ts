@@ -19,18 +19,18 @@ export function useHighlights(letterNumber?: number) {
   }, [load])
 
   const addHighlight = useCallback(async (h: Highlight) => {
-    await db.addHighlight(h)
     setHighlights(prev => [...prev, h])
+    await db.addHighlight(h)
   }, [])
 
   const removeHighlight = useCallback(async (id: string) => {
-    await db.deleteHighlight(id)
     setHighlights(prev => prev.filter(h => h.id !== id))
+    await db.deleteHighlight(id)
   }, [])
 
   const clearAll = useCallback(async () => {
-    await db.clearAllHighlights()
     setHighlights([])
+    await db.clearAllHighlights()
   }, [])
 
   return { highlights, loading, addHighlight, removeHighlight, clearAll, reload: load }
