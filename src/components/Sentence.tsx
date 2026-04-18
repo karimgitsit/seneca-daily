@@ -1,36 +1,42 @@
-import type { MouseEvent } from 'react'
-
 interface Props {
   text: string
   isHighlighted: boolean
   onTap: () => void
+  highlightMode: boolean
 }
 
-export default function Sentence({ text, isHighlighted, onTap }: Props) {
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    onTap()
+export default function Sentence({ text, isHighlighted, onTap, highlightMode }: Props) {
+  if (!highlightMode) {
+    return (
+      <span
+        className={`rounded-sm ${isHighlighted ? 'bg-[var(--color-highlight)]' : ''}`}
+      >
+        {text}
+      </span>
+    )
   }
 
   return (
-    <a
-      href="#"
-      onClick={handleClick}
+    <button
+      type="button"
+      onClick={onTap}
       style={{
+        font: 'inherit',
         color: 'inherit',
-        textDecoration: 'none',
+        textAlign: 'left',
+        display: 'block',
+        width: '100%',
+        padding: '10px 12px',
+        margin: '4px 0',
         cursor: 'pointer',
         touchAction: 'manipulation',
-        WebkitUserSelect: 'none',
-        userSelect: 'none',
-        WebkitTouchCallout: 'none',
         WebkitTapHighlightColor: 'transparent',
       }}
-      className={`transition-colors duration-200 rounded-sm ${
+      className={`rounded transition-colors leading-[1.6] ${
         isHighlighted ? 'bg-[var(--color-highlight)]' : ''
       }`}
     >
       {text}
-    </a>
+    </button>
   )
 }
