@@ -10,7 +10,7 @@ interface Props {
 
 export default function LetterBody({ paragraphs, highlights, onToggleHighlight }: Props) {
   return (
-    <div className="letter-body">
+    <div className="letter-body select-none">
       {paragraphs.map((text, i) => (
         <Paragraph
           key={i}
