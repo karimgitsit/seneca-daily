@@ -4,9 +4,11 @@ import { useCurrentLetter } from '../hooks/useCurrentLetter'
 import { useHighlights } from '../hooks/useHighlights'
 import { useScrollPosition } from '../hooks/useScrollPosition'
 import { useReadLetters } from '../hooks/useReadLetters'
+import { useHighlightMode } from '../hooks/useHighlightMode'
 import LetterHeader from '../components/LetterHeader'
 import LetterBody from '../components/LetterBody'
 import NavigationArrows from '../components/NavigationArrows'
+import HighlightModeToggle from '../components/HighlightModeToggle'
 import type { Highlight } from '../types'
 
 export default function ReadingView() {
@@ -14,6 +16,7 @@ export default function ReadingView() {
   const { currentLetter, setCurrentLetter } = useCurrentLetter()
   const { highlights, addHighlight, removeHighlight } = useHighlights(currentLetter)
   const { readLetters, toggle: toggleReadLetter } = useReadLetters()
+  const { highlightMode, toggleHighlightMode } = useHighlightMode()
   const scrollRef = useRef<HTMLElement | null>(null)
 
   // Get the main scroll container from the Layout
@@ -93,6 +96,7 @@ export default function ReadingView() {
         paragraphs={letter.paragraphs}
         letterNumber={letter.number}
         highlights={highlights}
+        highlightMode={highlightMode}
         onToggleHighlight={handleToggleHighlight}
       />
       <NavigationArrows
@@ -103,6 +107,7 @@ export default function ReadingView() {
         isRead={isRead}
         onToggleRead={toggleRead}
       />
+      <HighlightModeToggle enabled={highlightMode} onToggle={toggleHighlightMode} />
     </div>
   )
 }
