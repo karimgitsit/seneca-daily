@@ -1,4 +1,4 @@
-const CACHE_NAME = 'seneca-v2'
+const CACHE_NAME = 'seneca-v3'
 const PRECACHE_URLS = [
   './',
   './index.html',
