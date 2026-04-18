@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface Props {
   text: string
@@ -11,45 +11,69 @@ const TAP_MAX_PX = 10
 const FIRE_LOCKOUT_MS = 500
 
 export default function Sentence({ text, isHighlighted, onTap }: Props) {
-  const start = useRef<{ t: number; x: number; y: number } | null>(null)
-  const lastFire = useRef(0)
+  const spanRef = useRef<HTMLSpanElement>(null)
+  const onTapRef = useRef(onTap)
+  onTapRef.current = onTap
 
-  const fireTap = () => {
-    const now = Date.now()
-    if (now - lastFire.current < FIRE_LOCKOUT_MS) return
-    lastFire.current = now
-    onTap()
-  }
+  useEffect(() => {
+    const el = spanRef.current
+    if (!el) return
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    start.current = { t: Date.now(), x: e.clientX, y: e.clientY }
-  }
+    let start: { t: number; x: number; y: number } | null = null
+    let lastFire = 0
 
-  const onPointerUp = (e: React.PointerEvent) => {
-    const s = start.current
-    start.current = null
-    if (!s) return
-    const dt = Date.now() - s.t
-    const dx = Math.abs(e.clientX - s.x)
-    const dy = Math.abs(e.clientY - s.y)
-    if (dt <= TAP_MAX_MS && dx <= TAP_MAX_PX && dy <= TAP_MAX_PX) {
+    const fireTap = () => {
+      const now = Date.now()
+      if (now - lastFire < FIRE_LOCKOUT_MS) return
+      lastFire = now
+      onTapRef.current()
+    }
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (!t) return
+      start = { t: Date.now(), x: t.clientX, y: t.clientY }
+    }
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const s = start
+      start = null
+      if (!s) return
+      const t = e.changedTouches[0]
+      if (!t) return
+      const dt = Date.now() - s.t
+      const dx = Math.abs(t.clientX - s.x)
+      const dy = Math.abs(t.clientY - s.y)
+      if (dt <= TAP_MAX_MS && dx <= TAP_MAX_PX && dy <= TAP_MAX_PX) {
+        e.preventDefault()
+        fireTap()
+      }
+    }
+
+    const onClick = () => {
       fireTap()
     }
-    // Otherwise: long-press or drag → let iOS handle native selection.
-  }
 
-  const onPointerCancel = () => {
-    start.current = null
-  }
+    // Native listeners bypass React's synthetic event delegation. iOS
+    // Safari doesn't reliably dispatch synthetic click/touch events
+    // through the document root for tapped spans inside a <p>, so we
+    // attach directly to the element.
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchend', onTouchEnd, { passive: false })
+    el.addEventListener('click', onClick)
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchend', onTouchEnd)
+      el.removeEventListener('click', onClick)
+    }
+  }, [])
 
   return (
     <span
+      ref={spanRef}
       role="button"
       tabIndex={0}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
-      onClick={fireTap}
       style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
       className={`transition-colors duration-200 cursor-pointer rounded-sm ${
         isHighlighted ? 'bg-[var(--color-highlight)]' : ''
